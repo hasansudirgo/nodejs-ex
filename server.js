@@ -1,6 +1,15 @@
 //  OpenShift sample Node application
 
   
+
+
+var express = require('express'),
+    app     = express(),
+    morgan  = require('morgan');
+    
+
+var http = require('http').Server(app);
+
   var enableCORS = function(req, res, next) {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
@@ -14,12 +23,7 @@
 
 app.use(enableCORS);
 
-var express = require('express'),
-    app     = express(),
-    morgan  = require('morgan');
-    
 
-var http = require('http').Server(app);
 var io = require('socket.io')(http);
 io.on('connection', function(socket){
 	console.log('socket connected bla bla bla');
