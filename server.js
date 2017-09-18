@@ -3,25 +3,25 @@
   
 
 
-var express = require('express'),
-    app     = express(),
-    morgan  = require('morgan');
-    
+
 
 var http = require('http').Server(app);
+var express = require('express')
+var cors = require('cors')
+var app = express();
+var morgan  = require('morgan');
 
-  var enableCORS = function(req, res, next) {
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-	res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-   Length, X-Requested-With');
-	if ('OPTIONS' == req.method) {
-  	res.send(200);
-	}else {
-  	next();
-	}
-};
+var whitelist = ['http://localhost:1841']
+var corsOptionsDelegate = function (req, callback) {
+  var corsOptions;
+  if (whitelist.indexOf(req.header('Origin')) !== -1) {
+    corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+  }else{
+    corsOptions = { origin: false } // disable CORS for this request
+  }
+  callback(null, corsOptions) // callback expects two parameters: error and options
+}
 
-app.use(enableCORS);
 
 
 var io = require('socket.io')(http);
